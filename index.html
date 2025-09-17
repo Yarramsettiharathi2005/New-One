@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple Time Management Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #333;
+    }
+    .timer {
+      font-size: 4rem;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #222;
+    }
+    .buttons button {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin: 0 10px;
+      font-size: 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .buttons button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple Timer</h1>
+  <div class="timer" id="timer">00:00:00</div>
+
+  <div class="buttons">
+    <button id="startBtn">Start</button>
+    <button id="pauseBtn" disabled>Pause</button>
+    <button id="resetBtn" disabled>Reset</button>
+  </div>
+
+  <script>
+    let timerDisplay = document.getElementById('timer');
+    let startBtn = document.getElementById('startBtn');
+    let pauseBtn = document.getElementById('pauseBtn');
+    let resetBtn = document.getElementById('resetBtn');
+
+    let seconds = 0;
+    let interval = null;
+    let isRunning = false;
+
+    function formatTime(sec) {
+      let hrs = Math.floor(sec / 3600);
+      let mins = Math.floor((sec % 3600) / 60);
+      let secs = sec % 60;
+      return (
+        (hrs < 10 ? "0" + hrs : hrs) + ":" +
+        (mins < 10 ? "0" + mins : mins) + ":" +
+        (secs < 10 ? "0" + secs : secs)
+      );
+    }
+
+    function updateTimer() {
+      seconds++;
+      timerDisplay.textContent = formatTime(seconds);
+    }
+
+    startBtn.addEventListener('click', () => {
+      if (!isRunning) {
+        interval = setInterval(updateTimer, 1000);
+        isRunning = true;
+        startBtn.disabled = true;
+        pauseBtn.disabled = false;
+        resetBtn.disabled = false;
+      }
+    });
+
+    pauseBtn.addEventListener('click', () => {
+      if (isRunning) {
+        clearInterval(interval);
+        isRunning = false;
+        startBtn.disabled = false;
+        pauseBtn.disabled = true;
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      clearInterval(interval);
+      seconds = 0;
+      timerDisplay.textContent = "00:00:00";
+      isRunning = false;
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      resetBtn.disabled = true;
+    });
+  </script>
+
+</body>
+</html>
